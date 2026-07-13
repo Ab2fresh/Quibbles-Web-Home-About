@@ -1,0 +1,1447 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quibbles</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+          Arial, sans-serif;
+        background: #eef0f2;
+        color: #1c1c1c;
+        font-size: 14px;
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      /* ---------- Top bar ---------- */
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #ffffff;
+        padding: 10px 24px;
+        border-bottom: 1px solid #e5e7eb;
+        gap: 20px;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 20px;
+        font-weight: 700;
+        color: #1a1a1a;
+        white-space: nowrap;
+        cursor: pointer;
+      }
+
+      /* LOGO PLACEHOLDER: swap logo-mark + text for the official Quibbles logo asset */
+      .logo .logo-mark {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: #2563eb;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .logo .logo-mark svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      .search-bar {
+        flex: 1;
+        max-width: 640px;
+      }
+
+      .search-bar input {
+        width: 100%;
+        padding: 9px 14px;
+        border: 1px solid #d7dade;
+        border-radius: 6px;
+        background: #f7f8f9;
+        font-size: 13px;
+        color: #6b7280;
+      }
+
+      .topbar-right {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        white-space: nowrap;
+      }
+
+      .btn-create {
+        background: #2563eb;
+        color: #fff;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .icon-btn {
+        width: 20px;
+        height: 20px;
+        color: #4b5563;
+        cursor: pointer;
+      }
+
+      .user-chip {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-weight: 600;
+        font-size: 13px;
+      }
+
+      /* AVATAR PLACEHOLDER: swap for the real uploaded profile photo */
+      .avatar {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        object-fit: cover;
+        background: linear-gradient(135deg, #7c3aed, #db2777);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 11px;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+
+      /* ---------- Layout ---------- */
+      .layout {
+        display: grid;
+        grid-template-columns: 240px 1fr 260px;
+        gap: 16px;
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: 16px 24px;
+        align-items: start;
+      }
+
+      .layout.two-col {
+        grid-template-columns: 240px 1fr;
+      }
+
+      .page {
+        display: none;
+      }
+      .page.active {
+        display: grid;
+      }
+
+      /* ---------- Sidebar ---------- */
+      .sidebar {
+        background: #ffffff;
+        border-radius: 8px;
+        padding: 14px 0;
+        border: 1px solid #eceef0;
+      }
+
+      .nav-list {
+        list-style: none;
+      }
+
+      .nav-list li a {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 18px;
+        font-size: 13.5px;
+        color: #374151;
+        cursor: pointer;
+      }
+
+      .nav-list li a svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+        color: #6b7280;
+      }
+
+      .nav-list li.active a {
+        background: #eef2ff;
+        color: #2563eb;
+        font-weight: 600;
+      }
+      .nav-list li.active a svg {
+        color: #2563eb;
+      }
+
+      .sidebar-section {
+        padding: 14px 18px 6px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .sidebar-section span {
+        font-size: 11px;
+        font-weight: 700;
+        color: #9ca3af;
+        letter-spacing: 0.04em;
+      }
+
+      .sidebar-section button {
+        font-size: 11px;
+        font-weight: 600;
+        color: #2563eb;
+        background: #eef2ff;
+        border: none;
+        padding: 3px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .community-list {
+        list-style: none;
+      }
+
+      .community-list li a {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 7px 18px;
+        font-size: 13px;
+        color: #374151;
+      }
+
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+
+      .resources-list {
+        list-style: none;
+        margin-bottom: 6px;
+      }
+
+      .resources-list li a {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 7px 18px;
+        font-size: 13px;
+        color: #374151;
+        cursor: pointer;
+      }
+      .resources-list li a svg {
+        width: 15px;
+        height: 15px;
+        color: #6b7280;
+      }
+
+      .social-row {
+        display: flex;
+        gap: 14px;
+        padding: 10px 18px 4px;
+      }
+      .social-row svg {
+        width: 16px;
+        height: 16px;
+        color: #6b7280;
+      }
+
+      /* ---------- Feed / center column ---------- */
+      .filter-row {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+      }
+
+      .pill {
+        padding: 7px 16px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        color: #374151;
+        cursor: pointer;
+      }
+
+      .pill.active {
+        background: #2563eb;
+        color: #fff;
+        border-color: #2563eb;
+      }
+
+      .tag-row {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+      }
+
+      .tag-pill {
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 12.5px;
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        color: #4b5563;
+      }
+
+      .post-card {
+        background: #ffffff;
+        border: 1px solid #eceef0;
+        border-radius: 8px;
+        padding: 14px 16px;
+        margin-bottom: 12px;
+        display: flex;
+        gap: 12px;
+      }
+
+      .vote-col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        color: #6b7280;
+        font-size: 13px;
+        font-weight: 700;
+        min-width: 22px;
+      }
+
+      .vote-col svg {
+        width: 15px;
+        height: 15px;
+        cursor: pointer;
+        color: #9ca3af;
+      }
+
+      .post-body {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .post-meta {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        color: #6b7280;
+        margin-bottom: 6px;
+      }
+
+      .post-meta .badge {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+
+      .post-meta strong {
+        color: #1f2937;
+        font-weight: 700;
+      }
+
+      .post-title {
+        font-size: 14.5px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        line-height: 1.5;
+      }
+
+      .post-img-fake {
+        width: 100%;
+        max-width: 340px;
+        height: 170px;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #111, #333);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #d4af37;
+        font-weight: 700;
+        font-size: 22px;
+        letter-spacing: 2px;
+        margin: 8px 0;
+        text-align: center;
+        padding: 10px;
+      }
+
+      .post-caption {
+        font-size: 13px;
+        color: #374151;
+        margin-bottom: 8px;
+        line-height: 1.5;
+      }
+
+      .post-actions {
+        display: flex;
+        gap: 18px;
+        font-size: 12.5px;
+        color: #6b7280;
+        margin-top: 6px;
+      }
+
+      .post-actions span {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        cursor: pointer;
+      }
+
+      /* ---------- Right column ---------- */
+      .ad-box {
+        background: #ffffff;
+        border: 1px solid #eceef0;
+        border-radius: 8px;
+        height: 160px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #9ca3af;
+        font-size: 13px;
+        margin-bottom: 16px;
+      }
+
+      .right-col h4 {
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 10px;
+        color: #1f2937;
+      }
+
+      .rec-card {
+        background: #ffffff;
+        border: 1px solid #eceef0;
+        border-radius: 8px;
+        padding: 10px 12px;
+        margin-bottom: 10px;
+        display: flex;
+        gap: 10px;
+      }
+
+      .rec-badge {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+
+      .rec-meta {
+        font-size: 11px;
+        color: #6b7280;
+        margin-bottom: 4px;
+      }
+
+      .rec-title {
+        font-size: 12.5px;
+        font-weight: 600;
+        color: #1f2937;
+        line-height: 1.4;
+        margin-bottom: 6px;
+      }
+
+      .rec-stats {
+        display: flex;
+        gap: 12px;
+        font-size: 11px;
+        color: #9ca3af;
+      }
+      .rec-stats span {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      /* ---------- About page ---------- */
+      .about-panel {
+        background: #ffffff;
+        border: 1px solid #eceef0;
+        border-radius: 8px;
+        padding: 30px 34px;
+      }
+
+      .about-panel h1 {
+        font-size: 26px;
+        font-weight: 700;
+        margin-bottom: 6px;
+      }
+
+      .about-sub {
+        color: #6b7280;
+        font-size: 14px;
+        margin-bottom: 18px;
+      }
+
+      .about-panel hr {
+        border: none;
+        border-top: 1px solid #eceef0;
+        margin-bottom: 22px;
+      }
+
+      .about-panel h2 {
+        font-size: 18px;
+        font-weight: 700;
+        margin: 22px 0 10px;
+      }
+
+      .about-panel p {
+        font-size: 13.5px;
+        line-height: 1.75;
+        color: #374151;
+        margin-bottom: 12px;
+      }
+
+      .about-panel a.link {
+        color: #2563eb;
+        text-decoration: underline;
+      }
+
+      .principle {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 14px;
+        align-items: flex-start;
+      }
+
+      .principle svg {
+        width: 18px;
+        height: 18px;
+        color: #2563eb;
+        margin-top: 2px;
+        flex-shrink: 0;
+      }
+
+      .principle p {
+        margin-bottom: 0;
+      }
+      .principle strong {
+        color: #1f2937;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="topbar">
+      <div class="logo" onclick="showPage('home')">
+        <img
+          src="images/logo.jpeg"
+          alt="Quibbles logo"
+          style="height: 24px; width: auto"
+        />
+      </div>
+      <div class="search-bar">
+        <input type="text" placeholder="Search Quibbles" />
+      </div>
+      <div class="topbar-right">
+        <button class="btn-create">Create New!</button>
+        <svg
+          class="icon-btn"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+          <path d="M13.73 21a2 2 0 01-3.46 0" />
+        </svg>
+        <div class="user-chip">
+          <img src="images/avatar.jpeg" class="avatar" alt="Ab_oloba" />
+          Ab_oloba
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= HOME PAGE ================= -->
+    <div class="layout page active" id="page-home">
+      <div class="sidebar">
+        <ul class="nav-list">
+          <li class="active">
+            <a onclick="showPage('home')"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M3 11l9-8 9 8" />
+                <path d="M5 10v10h14V10" /></svg
+              >Home</a
+            >
+          </li>
+          <li>
+            <a
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 7v5l3 3" /></svg
+              >Latest</a
+            >
+          </li>
+          <li>
+            <a
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M3 17l6-6 4 4 8-8" /></svg
+              >Trending</a
+            >
+          </li>
+          <li>
+            <a
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M21 11.5a8.4 8.4 0 01-9 8.5A8.4 8.4 0 013 11.5 8.4 8.4 0 0112 3a8.4 8.4 0 019 8.5z"
+                /></svg
+              >Chat</a
+            >
+          </li>
+          <li>
+            <a
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 8v8M8 12h8" /></svg
+              >Create New Post</a
+            >
+          </li>
+        </ul>
+
+        <div class="sidebar-section">
+          <span>COMMUNITIES</span>
+          <button>Create</button>
+        </div>
+        <ul class="community-list">
+          <li>
+            <a href="#"
+              ><svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="9" /></svg
+              >All Communities</a
+            >
+          </li>
+          <li>
+            <a href="#"
+              ><span class="dot" style="background: #c026d3"></span
+              >q/interaction</a
+            >
+          </li>
+          <li>
+            <a href="#"
+              ><span class="dot" style="background: #dc2626"></span>q/NEWS</a
+            >
+          </li>
+          <li>
+            <a href="#"
+              ><span class="dot" style="background: #f97316"></span
+              >q/gist_corner</a
+            >
+          </li>
+          <li>
+            <a href="#"
+              ><span class="dot" style="background: #eab308"></span>q/Jobs</a
+            >
+          </li>
+          <li>
+            <a href="#"
+              ><span class="dot" style="background: #ef4444"></span>q/Nigeria</a
+            >
+          </li>
+          <li>
+            <a href="#"
+              ><span class="dot" style="background: #2563eb"></span
+              >q/Education</a
+            >
+          </li>
+          <li>
+            <a href="#"
+              ><span class="dot" style="background: #0ea5e9"></span>q/Health</a
+            >
+          </li>
+          <li>
+            <a href="#"
+              ><span class="dot" style="background: #6366f1"></span
+              >q/World_Cup</a
+            >
+          </li>
+          <li>
+            <a href="#"
+              ><span class="dot" style="background: #22c55e"></span
+              >q/Entertainment</a
+            >
+          </li>
+          <li>
+            <a href="#"
+              ><span class="dot" style="background: #f97316"></span
+              >q/Relationship</a
+            >
+          </li>
+        </ul>
+
+        <div class="sidebar-section"><span>RESOURCES</span></div>
+        <ul class="resources-list">
+          <li>
+            <a onclick="showPage('about')"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 16v-4M12 8h.01" /></svg
+              >About Quibbles</a
+            >
+          </li>
+          <li>
+            <a
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M4 21V3l16 9-16 9z" /></svg
+              >Advertise</a
+            >
+          </li>
+          <li>
+            <a
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"
+                /></svg
+              >Request Feature</a
+            >
+          </li>
+          <li>
+            <a
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="9" />
+                <path
+                  d="M9.5 9a2.5 2.5 0 015 0c0 2-2.5 2-2.5 4M12 17h.01"
+                /></svg
+              >Help</a
+            >
+          </li>
+          <li>
+            <a
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="4" y="4" width="16" height="16" rx="2" />
+                <path d="M9 9h6v6H9z" /></svg
+              >Report Bug</a
+            >
+          </li>
+          <li>
+            <a
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M16 18l6-6-6-6M8 6l-6 6 6 6" /></svg
+              >Version 1.6.8.0</a
+            >
+          </li>
+        </ul>
+        <div class="social-row">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <rect x="2" y="2" width="20" height="20" rx="5" />
+            <circle cx="12" cy="12" r="4" />
+          </svg>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M23 3a10.9 10.9 0 01-3.14 1.53A4.48 4.48 0 0022.4.36a9 9 0 01-2.84 1.09 4.52 4.52 0 00-7.7 4.13A12.8 12.8 0 013 1.64a4.5 4.5 0 001.4 6.04 4.4 4.4 0 01-2-.57v.06a4.52 4.52 0 003.6 4.43 4.5 4.5 0 01-2 .08 4.52 4.52 0 004.22 3.14A9.05 9.05 0 012 17.54 12.8 12.8 0 008.9 19.5c8.3 0 12.8-6.87 12.8-12.83 0-.2 0-.39-.01-.58A9.2 9.2 0 0023 3z"
+            />
+          </svg>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <rect x="2" y="9" width="4" height="12" />
+            <circle cx="4" cy="4" r="2" />
+            <path d="M10 9h4v2a4 4 0 018 0v10h-4v-9a2 2 0 00-4 0v9h-4z" />
+          </svg>
+        </div>
+      </div>
+
+      <div class="feed">
+        <div class="filter-row">
+          <button class="pill active">Latest Posts</button>
+          <button class="pill">interaction</button>
+          <button class="pill">NEWS</button>
+          <button class="pill">gist_corner</button>
+          <button class="pill">Jobs</button>
+        </div>
+        <div class="tag-row">
+          <span class="tag-pill">Nigeria</span>
+          <span class="tag-pill">Education</span>
+          <span class="tag-pill">Health</span>
+          <span class="tag-pill">World_Cup</span>
+          <span class="tag-pill">Entertainment</span>
+        </div>
+        <div class="tag-row" style="margin-top: -8px">
+          <span class="tag-pill">Relationship</span>
+        </div>
+
+        <div class="post-card">
+          <div class="vote-col">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M12 5l7 7H5z" />
+            </svg>
+            88
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M12 19l-7-7h14z" />
+            </svg>
+          </div>
+          <div class="post-body">
+            <div class="post-meta">
+              <span class="badge" style="background: #22c55e"></span
+              ><strong>PlayZone</strong> · Posted by beebrainbox · 14 hrs ago
+            </div>
+            <div class="post-title">
+              🐝 EMOJI + LETTERS GUESS THE NOUN !🐢🌊 Can you crack these? 👀🖐
+              Ja🔍 = 🏝 land = 💬 Drop your answers in the comments!
+            </div>
+            <div class="post-actions">
+              <span>💬 400 Comments</span>
+              <span>↗ Share</span>
+              <span>⚑ Report</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="post-card">
+          <div class="vote-col">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M12 5l7 7H5z" />
+            </svg>
+            126
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M12 19l-7-7h14z" />
+            </svg>
+          </div>
+          <div class="post-body">
+            <div class="post-meta">
+              <span class="badge" style="background: #22c55e"></span
+              ><strong>PlayZone</strong> · Posted by beebrainbox · 14 hrs ago
+            </div>
+            <div class="post-title">
+              🐣🐝 EMOJI + LETTERS GUESS THE NOUN! 🐢🌊 Can you crack these?
+              👀🖐 den = 💬 Drop your answers in the comments!
+            </div>
+            <div class="post-actions">
+              <span>💬 444 Comments</span>
+              <span>↗ Share</span>
+              <span>⚑ Report</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="post-card">
+          <div class="vote-col">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M12 5l7 7H5z" />
+            </svg>
+            90
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M12 19l-7-7h14z" />
+            </svg>
+          </div>
+          <div class="post-body">
+            <div class="post-meta">
+              <span class="badge" style="background: #22c55e"></span
+              ><strong>PlayZone</strong> · Posted by beebrainbox
+            </div>
+            <div class="post-title">Day 2! 🔥🎯 222PLAYZONE</div>
+            <div class="post-img-fake">PLAY ZONE — 3RD EDITION</div>
+            <div class="post-caption">
+              Day 2! 🔥🎯 Who's ready to play?! I'll be answering any first 5
+              questions about the game!
+            </div>
+            <div class="post-actions">
+              <span>💬 39 Comments</span>
+              <span>↗ Share</span>
+              <span>⚑ Report</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="post-card">
+          <div class="vote-col">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M12 5l7 7H5z" />
+            </svg>
+            1
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M12 19l-7-7h14z" />
+            </svg>
+          </div>
+          <div class="post-body">
+            <div class="post-meta">
+              <span class="badge" style="background: #22c55e"></span
+              ><strong>Thoughts</strong> · Posted by nwezi · 55 mins ago
+            </div>
+            <div class="post-title">
+              Imagine if you had the power to flog someone, who would you flog?
+            </div>
+            <div class="post-actions">
+              <span>💬 1 Comments</span>
+              <span>↗ Share</span>
+              <span>⚑ Report</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="right-col">
+        <div class="ad-box">Advertisement Space</div>
+        <h4>Recommended Posts</h4>
+
+        <div class="rec-card">
+          <span class="rec-badge" style="background: #22c55e"></span>
+          <div>
+            <div class="rec-meta">q/PlayZone · 14 hrs ago</div>
+            <div class="rec-title">
+              🐣🐝 EMOJI + LETTERS GUESS THE NOUN! 🐢🌊 Can you crack these?
+              👀🖐 den = 💬 Drop your answers in the comments.
+            </div>
+            <div class="rec-stats">
+              <span>⬆ 126 votes</span><span>💬 444 comments</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rec-card">
+          <span class="rec-badge" style="background: #f97316"></span>
+          <div>
+            <div class="rec-meta">q/gist_corner · 15 days ago</div>
+            <div class="rec-title">Who else is from x?</div>
+            <div class="rec-stats">
+              <span>⬆ 95 votes</span><span>💬 60 comments</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rec-card">
+          <span class="rec-badge" style="background: #22c55e"></span>
+          <div>
+            <div class="rec-meta">q/PlayZone · 1 day ago</div>
+            <div class="rec-title">Day 2! 🔥🎯 222PLAYZONE</div>
+            <div class="rec-stats">
+              <span>⬆ 90 votes</span><span>💬 39 comments</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rec-card">
+          <span class="rec-badge" style="background: #22c55e"></span>
+          <div>
+            <div class="rec-meta">q/PlayZone · 14 hrs ago</div>
+            <div class="rec-title">
+              🐣🐝 EMOJI + LETTERS GUESS THE NOUN! 🐢🌊 Can you crack these?
+              👀🖐 Ja 🔍 = 🏝 land = 💬 Drop your answers in the comments.
+            </div>
+            <div class="rec-stats">
+              <span>⬆ 88 votes</span><span>💬 400 comments</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rec-card">
+          <span class="rec-badge" style="background: #8b5cf6"></span>
+          <div>
+            <div class="rec-meta">q/QuibblesRewardsHub · 1 day ago</div>
+            <div class="rec-title">PLAYZONE 3.0 Sponsored By Quibbles Guys</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= ABOUT PAGE ================= -->
+    <div class="layout two-col page" id="page-about">
+      <div class="sidebar">
+        <ul class="nav-list">
+          <li>
+            <a onclick="showPage('home')"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M3 11l9-8 9 8" />
+                <path d="M5 10v10h14V10" /></svg
+              >Home</a
+            >
+          </li>
+          <li>
+            <a
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 7v5l3 3" /></svg
+              >Latest</a
+            >
+          </li>
+          <li>
+            <a
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M3 17l6-6 4 4 8-8" /></svg
+              >Trending</a
+            >
+          </li>
+          <li>
+            <a
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M21 11.5a8.4 8.4 0 01-9 8.5A8.4 8.4 0 013 11.5 8.4 8.4 0 0112 3a8.4 8.4 0 019 8.5z"
+                /></svg
+              >Chat</a
+            >
+          </li>
+          <li>
+            <a
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 8v8M8 12h8" /></svg
+              >Create New Post</a
+            >
+          </li>
+        </ul>
+
+        <div class="sidebar-section">
+          <span>COMMUNITIES</span>
+          <button>Create</button>
+        </div>
+        <ul class="community-list">
+          <li>
+            <a href="#"
+              ><svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="9" /></svg
+              >All Communities</a
+            >
+          </li>
+          <li>
+            <a href="#"
+              ><span class="dot" style="background: #c026d3"></span
+              >q/interaction</a
+            >
+          </li>
+          <li>
+            <a href="#"
+              ><span class="dot" style="background: #dc2626"></span>q/NEWS</a
+            >
+          </li>
+          <li>
+            <a href="#"
+              ><span class="dot" style="background: #f97316"></span
+              >q/gist_corner</a
+            >
+          </li>
+          <li>
+            <a href="#"
+              ><span class="dot" style="background: #eab308"></span>q/Jobs</a
+            >
+          </li>
+          <li>
+            <a href="#"
+              ><span class="dot" style="background: #ef4444"></span>q/Nigeria</a
+            >
+          </li>
+          <li>
+            <a href="#"
+              ><span class="dot" style="background: #2563eb"></span
+              >q/Education</a
+            >
+          </li>
+          <li>
+            <a href="#"
+              ><span class="dot" style="background: #0ea5e9"></span>q/Health</a
+            >
+          </li>
+          <li>
+            <a href="#"
+              ><span class="dot" style="background: #6366f1"></span
+              >q/World_Cup</a
+            >
+          </li>
+          <li>
+            <a href="#"
+              ><span class="dot" style="background: #22c55e"></span
+              >q/Entertainment</a
+            >
+          </li>
+          <li>
+            <a href="#"
+              ><span class="dot" style="background: #f97316"></span
+              >q/Relationship</a
+            >
+          </li>
+        </ul>
+
+        <div class="sidebar-section"><span>RESOURCES</span></div>
+        <ul class="resources-list">
+          <li class="active">
+            <a onclick="showPage('about')"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 16v-4M12 8h.01" /></svg
+              >About Quibbles</a
+            >
+          </li>
+          <li>
+            <a
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M4 21V3l16 9-16 9z" /></svg
+              >Advertise</a
+            >
+          </li>
+          <li>
+            <a
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"
+                /></svg
+              >Request Feature</a
+            >
+          </li>
+          <li>
+            <a
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="9" />
+                <path
+                  d="M9.5 9a2.5 2.5 0 015 0c0 2-2.5 2-2.5 4M12 17h.01"
+                /></svg
+              >Help</a
+            >
+          </li>
+          <li>
+            <a
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="4" y="4" width="16" height="16" rx="2" />
+                <path d="M9 9h6v6H9z" /></svg
+              >Report Bug</a
+            >
+          </li>
+          <li>
+            <a
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M16 18l6-6-6-6M8 6l-6 6 6 6" /></svg
+              >Version 1.6.8.0</a
+            >
+          </li>
+        </ul>
+        <div class="social-row">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <rect x="2" y="2" width="20" height="20" rx="5" />
+            <circle cx="12" cy="12" r="4" />
+          </svg>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M23 3a10.9 10.9 0 01-3.14 1.53A4.48 4.48 0 0022.4.36a9 9 0 01-2.84 1.09 4.52 4.52 0 00-7.7 4.13A12.8 12.8 0 013 1.64a4.5 4.5 0 001.4 6.04 4.4 4.4 0 01-2-.57v.06a4.52 4.52 0 003.6 4.43 4.5 4.5 0 01-2 .08 4.52 4.52 0 004.22 3.14A9.05 9.05 0 012 17.54 12.8 12.8 0 008.9 19.5c8.3 0 12.8-6.87 12.8-12.83 0-.2 0-.39-.01-.58A9.2 9.2 0 0023 3z"
+            />
+          </svg>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <rect x="2" y="9" width="4" height="12" />
+            <circle cx="4" cy="4" r="2" />
+            <path d="M10 9h4v2a4 4 0 018 0v10h-4v-9a2 2 0 00-4 0v9h-4z" />
+          </svg>
+        </div>
+      </div>
+
+      <div class="about-panel">
+        <h1>About Quibbles</h1>
+        <p class="about-sub">
+          Nigeria and Africa's growing community for answers, advice, and real
+          conversations. A place where people help each other, share knowledge,
+          and solve everyday problems together.
+        </p>
+        <hr />
+
+        <h2>What is Quibbles?</h2>
+        <p>
+          Quibbles is a community-driven platform where people can share
+          content, join discussions, and build communities around their
+          interests. Whether you're looking for a niche hobby group, the latest
+          news, or just a place to ask a question, Quibbles has a space for you.
+        </p>
+        <p>
+          Our platform is built on the idea of
+          <strong>"quibbling,"</strong> which means to engage in a conversation
+          about a specific topic, big or small. We believe that every voice
+          matters, and we provide the tools for you to find your community and
+          express your ideas. If you're curious about the full meaning and
+          purpose of the platform, check out
+          <a href="#" class="link">What Is Quibbles?</a>
+        </p>
+
+        <h2>Our Mission</h2>
+        <p>
+          To make it easy for Nigerians and Africans to get reliable answers,
+          learn from community experiences, and build meaningful conversations
+          around the topics that matter most.
+        </p>
+
+        <h2>Our Vision</h2>
+        <p>
+          In an age of endless information, our vision is to create a digital
+          home where meaningful connections and thoughtful discussions can
+          thrive. Quibbles aims to be more than just a place to consume content;
+          it's a place to contribute, debate, and grow. We are dedicated to
+          building a platform that is both intuitive and inspiring, where users
+          feel empowered to share their passions and connect with others who
+          share them.
+        </p>
+
+        <h2>Our Core Principles</h2>
+
+        <div class="principle">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+          </svg>
+          <p>
+            <strong>Community First:</strong> Quibbles is powered by its users.
+            We provide the platform, but you create the content and shape the
+            communities. Your passion is what makes Quibbles thrive.
+          </p>
+        </div>
+
+        <div class="principle">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M21 11.5a8.4 8.4 0 01-9 8.5A8.4 8.4 0 013 11.5 8.4 8.4 0 0112 3a8.4 8.4 0 019 8.5z"
+            />
+          </svg>
+          <p>
+            <strong>Open Discussion:</strong> We believe in free and open
+            conversation. We aim to create a space where diverse perspectives
+            can be shared respectfully and constructively.
+          </p>
+        </div>
+
+        <div class="principle">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z" />
+          </svg>
+          <p>
+            <strong>Safety and Respect:</strong> We are committed to fostering a
+            safe environment. We have clear guidelines and a dedicated
+            moderation team to ensure a positive experience for everyone.
+          </p>
+        </div>
+
+        <h2>Join the Conversation</h2>
+        <p>
+          Ready to start your journey on Quibbles? Dive into an existing
+          community or create your own. Whether you're an expert or a curious
+          newcomer, there's always a quibble to be had.
+        </p>
+      </div>
+    </div>
+
+    <script>
+      function showPage(name) {
+        document.querySelectorAll(".page").forEach(function (el) {
+          el.classList.remove("active");
+        });
+        document.getElementById("page-" + name).classList.add("active");
+        window.scrollTo(0, 0);
+      }
+    </script>
+  </body>
+</html>
